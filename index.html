@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symbiotic Module Configurator</title>
+    <meta name="description" content="Interactive vault builder for Symbiotic's modular system - configure, connect, and visualize your vault architecture">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #0a0c0f;
+            color: #CDFF3E;
+            overflow: hidden;
+        }
+
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(205, 255, 62, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(205, 255, 62, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .module-node {
+            cursor: move;
+            transition: all 0.2s;
+        }
+
+        .module-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(205, 255, 62, 0.3);
+        }
+
+        .module-node.selected {
+            box-shadow: 0 0 30px rgba(205, 255, 62, 0.5);
+            border-color: #CDFF3E !important;
+        }
+
+        .connection-point {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #CDFF3E;
+            border: 2px solid #0a0c0f;
+            cursor: crosshair;
+            transition: all 0.2s;
+        }
+
+        .connection-point:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 10px #CDFF3E;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(205, 255, 62, 0.3);
+            background: rgba(205, 255, 62, 0.1);
+            color: #CDFF3E;
+        }
+
+        .btn:hover {
+            background: rgba(205, 255, 62, 0.2);
+            border-color: #CDFF3E;
+        }
+
+        .btn-primary {
+            background: #CDFF3E;
+            color: #0a0c0f;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #b8e636;
+        }
+
+        .sidebar-item {
+            padding: 12px;
+            border: 1px solid rgba(205, 255, 62, 0.2);
+            border-radius: 8px;
+            cursor: grab;
+            transition: all 0.2s;
+            background: rgba(20, 24, 30, 0.8);
+        }
+
+        .sidebar-item:hover {
+            border-color: #CDFF3E;
+            background: rgba(205, 255, 62, 0.1);
+        }
+
+        .sidebar-item:active {
+            cursor: grabbing;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(20, 24, 30, 0.8);
+            border: 1px solid rgba(205, 255, 62, 0.2);
+            border-radius: 6px;
+            color: #CDFF3E;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #CDFF3E;
+            box-shadow: 0 0 0 2px rgba(205, 255, 62, 0.1);
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: rgba(205, 255, 62, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef } = React;
+
+        // Lucide Icons as SVG components
+        const Database = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+        );
+
+        const Network = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="16" y="16" width="6" height="6" rx="1"></rect>
+                <rect x="2" y="16" width="6" height="6" rx="1"></rect>
+                <rect x="9" y="2" width="6" height="6" rx="1"></rect>
+                <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path>
+                <path d="M12 12V8"></path>
+            </svg>
+        );
+
+        const Shield = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+        );
+
+        const Users = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+        );
+
+        const AlertTriangle = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+        );
+
+        const Download = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        );
+
+        const Trash = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+        );
+
+        const moduleTypes = [
+            { id: 'network', name: 'Network Module', icon: Network, color: '#CDFF3E' },
+            { id: 'operator', name: 'Operator Module', icon: Users, color: '#CDFF3E' },
+            { id: 'vault', name: 'Vault Module', icon: Database, color: '#CDFF3E' },
+            { id: 'slasher', name: 'Slasher Module', icon: AlertTriangle, color: '#CDFF3E' },
+            { id: 'resolver', name: 'Resolver Module', icon: Shield, color: '#CDFF3E' },
+        ];
+
+        function ModuleNode({ module, isSelected, onMove, onSelect, onConnectionStart, onConnectionEnd }) {
+            const [isDragging, setIsDragging] = useState(false);
+            const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+            const Icon = module.icon;
+
+            const handleMouseDown = (e) => {
+                if (e.target.classList.contains('connection-point')) return;
+                setIsDragging(true);
+                setDragOffset({
+                    x: e.clientX - module.position.x,
+                    y: e.clientY - module.position.y
+                });
+                onSelect(module);
+            };
+
+            const handleMouseMove = (e) => {
+                if (isDragging) {
+                    onMove(module.id, {
+                        x: e.clientX - dragOffset.x,
+                        y: e.clientY - dragOffset.y
+                    });
+                }
+            };
+
+            const handleMouseUp = () => {
+                setIsDragging(false);
+            };
+
+            React.useEffect(() => {
+                if (isDragging) {
+                    document.addEventListener('mousemove', handleMouseMove);
+                    document.addEventListener('mouseup', handleMouseUp);
+                    return () => {
+                        document.removeEventListener('mousemove', handleMouseMove);
+                        document.removeEventListener('mouseup', handleMouseUp);
+                    };
+                }
+            }, [isDragging]);
+
+            return (
+                <div
+                    className={`module-node ${isSelected ? 'selected' : ''}`}
+                    style={{
+                        position: 'absolute',
+                        left: module.position.x,
+                        top: module.position.y,
+                        width: '240px',
+                        background: 'rgba(20, 24, 30, 0.95)',
+                        border: '1px solid rgba(205, 255, 62, 0.3)',
+                        borderRadius: '8px',
+                        padding: '12px',
+                        zIndex: isSelected ? 10 : 5,
+                    }}
+                    onMouseDown={handleMouseDown}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <Icon />
+                        <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '14px', fontWeight: '600' }}>{module.name}</div>
+                            <div style={{ fontSize: '11px', color: 'rgba(205, 255, 62, 0.6)' }}>{module.type}</div>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px' }}>
+                        <div
+                            className="connection-point"
+                            onMouseDown={(e) => {
+                                e.stopPropagation();
+                                onConnectionStart(module.id, e);
+                            }}
+                            title="Start connection"
+                        />
+                        <div
+                            className="connection-point"
+                            onMouseUp={(e) => {
+                                e.stopPropagation();
+                                onConnectionEnd(module.id);
+                            }}
+                            title="End connection"
+                        />
+                    </div>
+                </div>
+            );
+        }
+
+        function ModuleSidebar({ onModuleSelect }) {
+            const handleDragStart = (e, moduleType) => {
+                e.dataTransfer.setData('moduleType', JSON.stringify(moduleType));
+            };
+
+            return (
+                <div style={{ width: '280px', background: '#14181e', borderRight: '1px solid rgba(205, 255, 62, 0.2)', padding: '20px', overflowY: 'auto' }}>
+                    <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>Available Modules</h2>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        {moduleTypes.map((type) => {
+                            const Icon = type.icon;
+                            return (
+                                <div
+                                    key={type.id}
+                                    className="sidebar-item"
+                                    draggable
+                                    onDragStart={(e) => handleDragStart(e, type)}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <Icon />
+                                        <span style={{ fontSize: '14px', fontWeight: '500' }}>{type.name}</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        function ConfigPanel({ selectedModule, onConfigChange }) {
+            if (!selectedModule) {
+                return (
+                    <div style={{ width: '320px', background: '#14181e', borderLeft: '1px solid rgba(205, 255, 62, 0.2)', padding: '20px' }}>
+                        <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>Configuration</h2>
+                        <p style={{ color: 'rgba(205, 255, 62, 0.6)', fontSize: '14px' }}>Select a module to configure</p>
+                    </div>
+                );
+            }
+
+            const handleChange = (key, value) => {
+                onConfigChange({ ...selectedModule.config, [key]: value });
+            };
+
+            return (
+                <div style={{ width: '320px', background: '#14181e', borderLeft: '1px solid rgba(205, 255, 62, 0.2)', padding: '20px', overflowY: 'auto' }}>
+                    <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px' }}>Configuration</h2>
+                    <div style={{ marginBottom: '16px' }}>
+                        <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>{selectedModule.name}</div>
+                        <div style={{ fontSize: '12px', color: 'rgba(205, 255, 62, 0.6)' }}>ID: {selectedModule.id}</div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {selectedModule.type === 'network' && (
+                            <>
+                                <div>
+                                    <label>Network Address</label>
+                                    <input
+                                        type="text"
+                                        placeholder="0x..."
+                                        value={selectedModule.config.address || ''}
+                                        onChange={(e) => handleChange('address', e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Middleware</label>
+                                    <select
+                                        value={selectedModule.config.middleware || ''}
+                                        onChange={(e) => handleChange('middleware', e.target.value)}
+                                    >
+                                        <option value="">Select...</option>
+                                        <option value="standard">Standard</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+                            </>
+                        )}
+
+                        {selectedModule.type === 'vault' && (
+                            <>
+                                <div>
+                                    <label>Collateral Asset</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Asset address"
+                                        value={selectedModule.config.collateral || ''}
+                                        onChange={(e) => handleChange('collateral', e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Delegator</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Delegator type"
+                                        value={selectedModule.config.delegator || ''}
+                                        onChange={(e) => handleChange('delegator', e.target.value)}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {selectedModule.type === 'operator' && (
+                            <div>
+                                <label>Operator Address</label>
+                                <input
+                                    type="text"
+                                    placeholder="0x..."
+                                    value={selectedModule.config.address || ''}
+                                    onChange={(e) => handleChange('address', e.target.value)}
+                                />
+                            </div>
+                        )}
+
+                        {selectedModule.type === 'slasher' && (
+                            <>
+                                <div>
+                                    <label>Slashing Type</label>
+                                    <select
+                                        value={selectedModule.config.type || ''}
+                                        onChange={(e) => handleChange('type', e.target.value)}
+                                    >
+                                        <option value="">Select...</option>
+                                        <option value="instant">Instant</option>
+                                        <option value="veto">Veto</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Veto Duration (seconds)</label>
+                                    <input
+                                        type="number"
+                                        value={selectedModule.config.vetoDuration || ''}
+                                        onChange={(e) => handleChange('vetoDuration', e.target.value)}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                        {selectedModule.type === 'resolver' && (
+                            <div>
+                                <label>Resolver Hints</label>
+                                <textarea
+                                    rows="3"
+                                    placeholder="Enter resolver configuration..."
+                                    value={selectedModule.config.hints || ''}
+                                    onChange={(e) => handleChange('hints', e.target.value)}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            const [modules, setModules] = useState([]);
+            const [connections, setConnections] = useState([]);
+            const [selectedModule, setSelectedModule] = useState(null);
+            const [draggingConnection, setDraggingConnection] = useState(null);
+            const canvasRef = useRef(null);
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                const moduleData = JSON.parse(e.dataTransfer.getData('moduleType'));
+                const rect = canvasRef.current?.getBoundingClientRect();
+                
+                if (rect) {
+                    const newModule = {
+                        id: `${moduleData.id}-${Date.now()}`,
+                        type: moduleData.id,
+                        name: moduleData.name,
+                        icon: moduleData.icon,
+                        position: {
+                            x: e.clientX - rect.left - 120,
+                            y: e.clientY - rect.top - 40,
+                        },
+                        config: {},
+                    };
+                    
+                    setModules([...modules, newModule]);
+                }
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+            };
+
+            const handleModuleMove = (id, newPosition) => {
+                setModules(modules.map(m => m.id === id ? { ...m, position: newPosition } : m));
+            };
+
+            const handleConnectionStart = (moduleId, e) => {
+                const rect = canvasRef.current?.getBoundingClientRect();
+                if (rect) {
+                    setDraggingConnection({
+                        from: moduleId,
+                        pos: { x: e.clientX - rect.left, y: e.clientY - rect.top }
+                    });
+                }
+            };
+
+            const handleConnectionEnd = (moduleId) => {
+                if (draggingConnection && draggingConnection.from !== moduleId) {
+                    setConnections([...connections, { from: draggingConnection.from, to: moduleId }]);
+                }
+                setDraggingConnection(null);
+            };
+
+            const handleCanvasMouseMove = (e) => {
+                if (draggingConnection && canvasRef.current) {
+                    const rect = canvasRef.current.getBoundingClientRect();
+                    setDraggingConnection({
+                        ...draggingConnection,
+                        pos: { x: e.clientX - rect.left, y: e.clientY - rect.top }
+                    });
+                }
+            };
+
+            const handleCanvasMouseUp = () => {
+                setDraggingConnection(null);
+            };
+
+            const handleConfigChange = (config) => {
+                if (selectedModule) {
+                    setSelectedModule({ ...selectedModule, config });
+                    setModules(modules.map(m => m.id === selectedModule.id ? { ...m, config } : m));
+                }
+            };
+
+            const clearCanvas = () => {
+                setModules([]);
+                setConnections([]);
+                setSelectedModule(null);
+            };
+
+            const exportConfig = () => {
+                const config = { modules, connections };
+                const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'vault-config.json';
+                a.click();
+            };
+
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+                    {/* Header */}
+                    <header style={{ height: '80px', background: '#14181e', borderBottom: '1px solid rgba(205, 255, 62, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                            <img src="https://pbs.twimg.com/profile_images/1767527942736392192/ouo922Aq_400x400.png" alt="Symbiotic" style={{ height: '48px', width: '48px' }} />
+                            <div>
+                                <h1 style={{ fontSize: '24px', fontWeight: '700' }}>Symbiotic Module Configurator</h1>
+                                <p style={{ fontSize: '14px', color: 'rgba(205, 255, 62, 0.7)' }}>Build and configure your vault architecture visually</p>
+                            </div>
+                        </div>
+                        <div style={{ padding: '6px 16px', borderRadius: '20px', background: 'rgba(205, 255, 62, 0.1)', border: '1px solid rgba(205, 255, 62, 0.3)' }}>
+                            <span style={{ fontSize: '12px', fontWeight: '600' }}>Interactive Vault Builder</span>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+                        <ModuleSidebar onModuleSelect={setSelectedModule} />
+                        
+                        {/* Canvas */}
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ height: '64px', background: '#14181e', borderBottom: '1px solid rgba(205, 255, 62, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
+                                <h2 style={{ fontSize: '18px', fontWeight: '700' }}>Configuration Canvas</h2>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <button className="btn" onClick={clearCanvas}>
+                                        <Trash /> Clear
+                                    </button>
+                                    <button className="btn btn-primary" onClick={exportConfig}>
+                                        <Download /> Export Config
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div
+                                ref={canvasRef}
+                                className="grid-bg"
+                                style={{ flex: 1, position: 'relative', overflow: 'hidden' }}
+                                onDrop={handleDrop}
+                                onDragOver={handleDragOver}
+                                onMouseMove={handleCanvasMouseMove}
+                                onMouseUp={handleCanvasMouseUp}
+                            >
+                                <svg style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
+                                    {connections.map((conn, i) => {
+                                        const fromModule = modules.find(m => m.id === conn.from);
+                                        const toModule = modules.find(m => m.id === conn.to);
+                                        if (!fromModule || !toModule) return null;
+
+                                        return (
+                                            <line
+                                                key={i}
+                                                x1={fromModule.position.x + 120}
+                                                y1={fromModule.position.y + 40}
+                                                x2={toModule.position.x + 120}
+                                                y2={toModule.position.y + 40}
+                                                stroke="#CDFF3E"
+                                                strokeWidth="2"
+                                                strokeDasharray="5,5"
+                                                opacity="0.6"
+                                            />
+                                        );
+                                    })}
+                                    
+                                    {draggingConnection && (() => {
+                                        const fromModule = modules.find(m => m.id === draggingConnection.from);
+                                        if (!fromModule) return null;
+
+                                        return (
+                                            <line
+                                                x1={fromModule.position.x + 120}
+                                                y1={fromModule.position.y + 40}
+                                                x2={draggingConnection.pos.x}
+                                                y2={draggingConnection.pos.y}
+                                                stroke="#CDFF3E"
+                                                strokeWidth="2"
+                                                strokeDasharray="5,5"
+                                                opacity="0.4"
+                                            />
+                                        );
+                                    })()}
+                                </svg>
+
+                                {modules.map((module) => (
+                                    <ModuleNode
+                                        key={module.id}
+                                        module={module}
+                                        isSelected={selectedModule?.id === module.id}
+                                        onMove={handleModuleMove}
+                                        onSelect={setSelectedModule}
+                                        onConnectionStart={handleConnectionStart}
+                                        onConnectionEnd={handleConnectionEnd}
+                                    />
+                                ))}
+
+                                {modules.length === 0 && (
+                                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <Database />
+                                            <p style={{ color: 'rgba(205, 255, 62, 0.4)', fontSize: '18px', marginTop: '16px' }}>Drag modules here to start building</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <ConfigPanel selectedModule={selectedModule} onConfigChange={handleConfigChange} />
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
