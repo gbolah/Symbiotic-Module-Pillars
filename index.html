@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Symbiosis - Modular Infrastructure</title>
     <meta name="description" content="Explore the path of symbiosis through distributed systems, modular architecture, and collaborative evolution">
+    <meta name="author" content="Symbiosis Team">
+    <meta property="og:title" content="Symbiosis - Modular Infrastructure">
+    <meta property="og:description" content="Where distributed systems evolve through balance, collaboration, and shared accountability">
+    
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -25,87 +29,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background: radial-gradient(ellipse at top, rgba(205, 255, 62, 0.15) 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom, rgba(205, 255, 62, 0.1) 0%, transparent 50%);
-        }
-
-        .hero-grid {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(205, 255, 62, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(205, 255, 62, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-        }
-
-        .hero-content {
-            position: relative;
-            text-align: center;
-            padding: 2rem;
-            max-width: 900px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            border: 1px solid rgba(205, 255, 62, 0.3);
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #CDFF3E;
-            margin-bottom: 2rem;
-            background: rgba(205, 255, 62, 0.05);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .hero-title {
-            font-size: clamp(3rem, 10vw, 7rem);
-            font-weight: 800;
-            line-height: 0.95;
-            margin-bottom: 2rem;
-            letter-spacing: -0.03em;
-            animation: fadeIn 0.8s ease-out 0.2s both;
-        }
-
-        .title-gradient {
-            background: linear-gradient(135deg, #FFFFFF 0%, #CDFF3E 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: clamp(1.125rem, 2vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.6);
-            max-width: 600px;
-            margin: 0 auto 3rem;
-            line-height: 1.6;
-            animation: fadeIn 0.8s ease-out 0.4s both;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, 10px); }
-        }
-
+        /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -117,15 +41,144 @@
             }
         }
 
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes accordion-down {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+            to {
+                height: auto;
+                opacity: 1;
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .animate-bounce-subtle {
+            animation: bounce-subtle 2s ease-in-out infinite;
+        }
+
+        .animate-celebrate {
+            animation: celebrate 0.6s ease-in-out;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            opacity: 0.3;
+            background-image: 
+                linear-gradient(rgba(205, 255, 62, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(205, 255, 62, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        .hero-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(205, 255, 62, 0.1) 0%, transparent 50%, rgba(205, 255, 62, 0.05) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(205, 255, 62, 0.3);
+            border-radius: 50px;
+            background: rgba(205, 255, 62, 0.05);
+        }
+
+        .hero-badge span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #CDFF3E;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 0%, #CDFF3E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: clamp(1.25rem, 2vw, 2rem);
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 48rem;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
         /* Modules Section */
         .modules-section {
-            padding: 8rem 2rem;
-            background: linear-gradient(to bottom, transparent, rgba(205, 255, 62, 0.02), transparent);
+            padding: 5rem 1rem;
+            position: relative;
+        }
+
+        .modules-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, rgba(205, 255, 62, 0.05), transparent);
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 10;
         }
 
         .section-number {
@@ -137,7 +190,7 @@
         }
 
         .section-title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(3rem, 6vw, 6rem);
             font-weight: 800;
             margin-bottom: 1rem;
             letter-spacing: -0.02em;
@@ -146,132 +199,242 @@
         .section-subtitle {
             font-size: 1.25rem;
             color: rgba(255, 255, 255, 0.5);
-            max-width: 600px;
+            max-width: 42rem;
             margin: 0 auto;
         }
 
         .modules-grid {
-            max-width: 1400px;
+            max-width: 90rem;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            gap: 1rem;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 2rem;
         }
 
         .module-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(205, 255, 62, 0.1);
-            border-radius: 24px;
-            padding: 3rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(205, 255, 62, 0.2);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
         }
 
         .module-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                        rgba(205, 255, 62, 0.08), 
-                        transparent 40%);
+            background: linear-gradient(135deg, rgba(205, 255, 62, 0) 0%, rgba(205, 255, 62, 0.05) 50%, rgba(205, 255, 62, 0) 100%);
             opacity: 0;
-            transition: opacity 0.4s;
+            transition: opacity 0.5s;
         }
 
         .module-card:hover::before {
             opacity: 1;
         }
 
-        .module-card.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .module-card:hover {
+            border-color: rgba(205, 255, 62, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(205, 255, 62, 0.3);
         }
 
-        .module-card:hover {
-            border-color: rgba(205, 255, 62, 0.4);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(205, 255, 62, 0.15);
+        .module-card.selected {
+            border-color: #CDFF3E;
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(205, 255, 62, 0.3);
         }
 
         .module-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             position: relative;
+            z-index: 10;
+        }
+
+        .module-icon-wrapper {
+            padding: 0.75rem;
+            border-radius: 1rem;
+            background: rgba(205, 255, 62, 0.1);
+            transition: all 0.5s;
+        }
+
+        .module-card.selected .module-icon-wrapper {
+            background: rgba(205, 255, 62, 0.2);
         }
 
         .module-icon {
-            width: 3rem;
-            height: 3rem;
+            width: 2rem;
+            height: 2rem;
             color: #CDFF3E;
-            position: relative;
         }
 
         .module-tagline {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            color: #CDFF3E;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            color: #CDFF3E;
         }
 
         .module-title {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: #FFFFFF;
+            transition: color 0.3s;
             position: relative;
+            z-index: 10;
+        }
+
+        .module-card:hover .module-title {
+            color: #CDFF3E;
         }
 
         .module-description {
             font-size: 1rem;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
             position: relative;
+            z-index: 10;
         }
 
         .module-insight {
-            font-size: 0.9rem;
+            padding-left: 1rem;
+            border-left: 2px solid rgba(205, 255, 62, 0.3);
+            font-size: 0.875rem;
             font-style: italic;
             color: rgba(205, 255, 62, 0.7);
-            padding-left: 1.5rem;
-            border-left: 2px solid rgba(205, 255, 62, 0.3);
             position: relative;
+            z-index: 10;
+        }
+
+        .module-details {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(205, 255, 62, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .module-details h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #CDFF3E;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .module-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .module-details li {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .module-details li::before {
+            content: '';
+            width: 0.375rem;
+            height: 0.375rem;
+            border-radius: 50%;
+            background: #CDFF3E;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .chevron {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            color: rgba(205, 255, 62, 0.5);
+            transition: transform 0.3s;
+            z-index: 10;
+        }
+
+        .module-card.selected .chevron {
+            transform: rotate(180deg);
+        }
+
+        .encouragement {
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .encouragement p {
+            color: #CDFF3E;
+            font-size: 1.125rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .encouragement svg {
+            width: 1.25rem;
+            height: 1.25rem;
         }
 
         /* Closing Section */
         .closing-section {
-            padding: 10rem 2rem;
+            padding: 8rem 1rem;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .closing-bg {
+            position: absolute;
+            inset: 0;
             background: radial-gradient(ellipse at center, rgba(205, 255, 62, 0.1) 0%, transparent 60%);
         }
 
+        .closing-content {
+            max-width: 64rem;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
         .closing-title {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(3rem, 8vw, 7rem);
             font-weight: 800;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
         }
 
         .closing-description {
-            font-size: clamp(1.125rem, 2vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.6);
-            max-width: 800px;
-            margin: 0 auto;
+            font-size: clamp(1.25rem, 2vw, 2rem);
+            color: rgba(255, 255, 255, 0.5);
             line-height: 1.8;
         }
 
         /* Footer */
         footer {
-            padding: 3rem 2rem;
+            padding: 2rem;
             text-align: center;
-            border-top: 1px solid rgba(205, 255, 62, 0.1);
+            border-top: 1px solid rgba(205, 255, 62, 0.2);
         }
 
         footer p {
@@ -279,14 +442,9 @@
             font-size: 0.875rem;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .modules-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .module-card {
-                padding: 2rem;
             }
         }
     </style>
@@ -295,7 +453,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect } = React;
 
         const modules = [
             {
@@ -304,7 +462,13 @@
                 title: "Network Module",
                 tagline: "The Foundation",
                 description: "Distributed trust architecture where every node contributes to collective resilience and efficiency.",
-                insight: "In decentralized systems, strength emerges from connection—not hierarchy."
+                insight: "In decentralized systems, strength emerges from connection, not hierarchy.",
+                details: [
+                    "Every node participates in consensus and validation",
+                    "Horizontal scaling through peer to peer architecture",
+                    "Byzantine fault tolerance ensures system integrity",
+                    "Dynamic topology adapts to network conditions"
+                ]
             },
             {
                 id: "vault",
@@ -312,23 +476,41 @@
                 title: "Vault Module",
                 tagline: "The Sanctuary",
                 description: "Secure value storage with cryptographic guarantees, enabling composable financial primitives.",
-                insight: "True security lies not in walls, but in mathematical certainty."
+                insight: "True security lies not in walls, but in mathematical certainty.",
+                details: [
+                    "Multi signature cryptographic security",
+                    "Composable primitive design for flexibility",
+                    "Zero knowledge proofs for privacy preservation",
+                    "Time locked vaults for strategic execution"
+                ]
             },
             {
                 id: "operator",
                 icon: "users",
                 title: "Operator Module",
                 tagline: "The Stewards",
-                description: "Delegated execution layer bridging user intent with protocol-level actions through trusted operators.",
-                insight: "Delegation amplifies capability when trust is systematically verifiable."
+                description: "Delegated execution layer bridging user intent with protocol level actions through trusted operators.",
+                insight: "Delegation amplifies capability when trust is systematically verifiable.",
+                details: [
+                    "Transparent delegation mechanisms",
+                    "Automated execution of complex strategies",
+                    "Performance based reputation systems",
+                    "Slashing conditions for accountability"
+                ]
             },
             {
                 id: "slasher",
                 icon: "alert-triangle",
                 title: "Slasher Module",
                 tagline: "The Guardian",
-                description: "Economic security mechanism enforcing protocol rules through stake-based accountability.",
-                insight: "Integrity persists when incentives align with honest behavior."
+                description: "Economic security mechanism enforcing protocol rules through stake based accountability.",
+                insight: "Integrity persists when incentives align with honest behavior.",
+                details: [
+                    "Economic penalties for protocol violations",
+                    "Graduated punishment based on severity",
+                    "Dispute windows for fair resolution",
+                    "Reward distribution to whistleblowers"
+                ]
             },
             {
                 id: "resolver",
@@ -336,7 +518,13 @@
                 title: "Resolver Module",
                 tagline: "The Harmonizer",
                 description: "Dispute resolution framework transforming conflicts into consensus through transparent arbitration.",
-                insight: "Evolution emerges from challenges resolved, not avoided."
+                insight: "Evolution emerges from challenges resolved, not avoided.",
+                details: [
+                    "Multi party arbitration with cryptoeconomic security",
+                    "Evidence submission and verification protocols",
+                    "Time bounded resolution processes",
+                    "Appeal mechanisms for complex cases"
+                ]
             }
         ];
 
@@ -348,103 +536,108 @@
             }, []);
 
             return React.createElement('i', {
-                'data-lucide': name
+                'data-lucide': name,
+                className: 'module-icon'
             });
         }
 
-        function ModuleCard({ module, index }) {
-            const [isVisible, setIsVisible] = useState(false);
-            const ref = useRef(null);
-
+        function ModuleCard({ module, isSelected, isCelebrating, onClick }) {
             useEffect(() => {
-                const observer = new IntersectionObserver(
-                    ([entry]) => {
-                        if (entry.isIntersecting) {
-                            setIsVisible(true);
-                        }
-                    },
-                    { threshold: 0.2 }
-                );
-
-                if (ref.current) {
-                    observer.observe(ref.current);
-                }
-
-                return () => {
-                    if (ref.current) {
-                        observer.unobserve(ref.current);
-                    }
-                };
-            }, []);
-
-            useEffect(() => {
-                if (isVisible && window.lucide) {
+                if (window.lucide) {
                     window.lucide.createIcons();
                 }
-            }, [isVisible]);
+            }, [isSelected]);
 
-            const handleMouseMove = (e) => {
-                const card = e.currentTarget;
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-            };
+            const cardClass = `module-card ${isSelected ? 'selected' : ''} ${isCelebrating ? 'animate-celebrate' : ''}`;
 
             return (
-                <div
-                    ref={ref}
-                    className={`module-card ${isVisible ? 'visible' : ''}`}
-                    onMouseMove={handleMouseMove}
-                    style={{ 
-                        transitionDuration: '1s',
-                        transitionDelay: `${index * 100}ms` 
-                    }}
-                >
+                <div className={cardClass} onClick={onClick}>
                     <div className="module-header">
-                        <div className="module-icon">
+                        <div className={`module-icon-wrapper ${isSelected ? 'animate-pulse-glow' : ''}`}>
                             <Icon name={module.icon} />
                         </div>
                         <div className="module-tagline">{module.tagline}</div>
                     </div>
+
                     <h3 className="module-title">{module.title}</h3>
                     <p className="module-description">{module.description}</p>
-                    <p className="module-insight">{module.insight}</p>
+                    <div className="module-insight">
+                        <p>{module.insight}</p>
+                    </div>
+
+                    {isSelected && (
+                        <div className="module-details animate-fade-in">
+                            <h4>
+                                <i data-lucide="sparkles" style={{ width: '1rem', height: '1rem' }}></i>
+                                Key Features
+                            </h4>
+                            <ul>
+                                {module.details.map((detail, idx) => (
+                                    <li key={idx} style={{ animationDelay: `${idx * 100}ms` }}>
+                                        {detail}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    <i data-lucide="chevron-down" className="chevron"></i>
                 </div>
             );
         }
 
         function App() {
+            const [selectedModule, setSelectedModule] = useState(null);
+            const [celebrateId, setCelebrateId] = useState(null);
+
             useEffect(() => {
                 if (window.lucide) {
                     window.lucide.createIcons();
                 }
-            }, []);
+            }, [selectedModule]);
+
+            const handleModuleClick = (id) => {
+                if (selectedModule === id) {
+                    setSelectedModule(null);
+                } else {
+                    setSelectedModule(id);
+                    setCelebrateId(id);
+                    setTimeout(() => setCelebrateId(null), 600);
+                }
+            };
 
             return (
                 <div>
                     {/* Hero Section */}
                     <section className="hero">
                         <div className="hero-grid"></div>
+                        <div className="hero-glow"></div>
                         <div className="hero-content">
-                            <div className="hero-badge">Modular Infrastructure</div>
+                            <div className="hero-badge animate-pulse-glow">
+                                <i data-lucide="sparkles" style={{ width: '1rem', height: '1rem', color: '#CDFF3E' }}></i>
+                                <span>Modular Infrastructure</span>
+                            </div>
+
                             <h1 className="hero-title">
-                                <span className="title-gradient">The Path of Symbiosis</span>
+                                <span className="gradient-text">The Path of Symbiosis</span>
                             </h1>
+
                             <p className="hero-description">
                                 Where distributed systems evolve through balance, collaboration, and shared accountability.
                             </p>
-                        </div>
-                        <div className="scroll-indicator">
-                            <Icon name="chevron-down" />
+
+                            <div className="animate-bounce-subtle">
+                                <i data-lucide="chevron-down" style={{ width: '2rem', height: '2rem', color: '#CDFF3E', margin: '0 auto' }}></i>
+                            </div>
                         </div>
                     </section>
 
                     {/* Modules Section */}
                     <section className="modules-section">
+                        <div className="modules-bg"></div>
+                        
                         <div className="section-header">
-                            <div className="section-number">01 — CORE</div>
+                            <div className="section-number">01 CORE</div>
                             <h2 className="section-title">Five Pillars</h2>
                             <p className="section-subtitle">
                                 A resilient, adaptive system built on fundamental principles
@@ -452,22 +645,41 @@
                         </div>
 
                         <div className="modules-grid">
-                            {modules.map((module, index) => (
-                                <ModuleCard key={module.id} module={module} index={index} />
+                            {modules.map((module) => (
+                                <ModuleCard
+                                    key={module.id}
+                                    module={module}
+                                    isSelected={selectedModule === module.id}
+                                    isCelebrating={celebrateId === module.id}
+                                    onClick={() => handleModuleClick(module.id)}
+                                />
                             ))}
                         </div>
+
+                        {selectedModule && (
+                            <div className="encouragement animate-fade-in">
+                                <p>
+                                    <i data-lucide="sparkles" className="animate-pulse-glow"></i>
+                                    Keep exploring! Click another pillar to learn more!
+                                    <i data-lucide="sparkles" className="animate-pulse-glow"></i>
+                                </p>
+                            </div>
+                        )}
                     </section>
 
                     {/* Closing Section */}
                     <section className="closing-section">
-                        <h2 className="closing-title">
-                            <span className="title-gradient">Continuous Evolution</span>
-                        </h2>
-                        <p className="closing-description">
-                            In symbiotic systems, there is no final state—only perpetual transformation. 
-                            Each module strengthens the whole, each interaction creates new possibilities, 
-                            and each challenge overcome expands the system's capacity for resilience.
-                        </p>
+                        <div className="closing-bg"></div>
+                        <div className="closing-content">
+                            <h2 className="closing-title">
+                                <span className="gradient-text">Continuous Evolution</span>
+                            </h2>
+                            <p className="closing-description">
+                                In symbiotic systems, there is no final state, only perpetual transformation. 
+                                Each module strengthens the whole, each interaction creates new possibilities, 
+                                and each challenge overcome expands the system's capacity for resilience.
+                            </p>
+                        </div>
                     </section>
 
                     {/* Footer */}
