@@ -3,12 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Path of Symbiosis</title>
-    <meta name="description" content="A visual journey through balance, collaboration, and evolution in modular systems">
+    <title>Symbiosis - Modular Infrastructure</title>
+    <meta name="description" content="Explore the path of symbiosis through distributed systems, modular architecture, and collaborative evolution">
+    <meta name="author" content="Symbiosis">
+
+    <meta property="og:title" content="Symbiosis - Modular Infrastructure">
+    <meta property="og:description" content="Explore the path of symbiosis through distributed systems, modular architecture, and collaborative evolution">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- React and Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
         * {
             margin: 0;
@@ -16,189 +28,316 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --background: hsl(217, 20%, 5%);
+            --foreground: hsl(75, 100%, 80%);
+            --card: hsl(217, 20%, 8%);
+            --card-foreground: hsl(75, 100%, 80%);
+            --primary: hsl(75, 100%, 60%);
+            --primary-foreground: hsl(217, 20%, 5%);
+            --secondary: hsl(217, 20%, 15%);
+            --muted: hsl(217, 20%, 15%);
+            --muted-foreground: hsl(75, 30%, 50%);
+            --border: hsl(217, 20%, 20%);
+            --ring: hsl(75, 100%, 60%);
+            --glow: 0 0 40px hsl(75 100% 60% / 0.3);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: #0a0c0f;
-            color: #CDFF3E;
+            background: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        .journey-container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 40px;
+            padding: 0 1.5rem;
         }
 
-        .hero-section {
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            transition: all 0.3s;
+        }
+
+        header.scrolled {
+            background: rgba(10, 12, 15, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header .container {
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            height: 3rem;
+            width: 3rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            padding: 6rem 1.5rem;
             text-align: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, hsl(75 100% 60% / 0.05), transparent);
+            pointer-events: none;
+        }
+
+        .hero-content {
             position: relative;
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            animation: fadeIn 0.6s ease-out;
         }
 
         .hero-title {
-            font-size: 72px;
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 700;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #CDFF3E 0%, #8BC34A 100%);
+            line-height: 1.1;
+            background: linear-gradient(to bottom right, var(--foreground), rgba(205, 255, 62, 0.6));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.6s ease-out 0.2s both;
         }
 
         .hero-subtitle {
-            font-size: 24px;
-            color: rgba(205, 255, 62, 0.7);
-            margin-bottom: 60px;
-            max-width: 600px;
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+            color: var(--muted-foreground);
+            max-width: 42rem;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+            animation: fadeIn 0.6s ease-out 0.4s both;
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: rgba(205, 255, 62, 0.7);
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        }
+
+        .bounce-icon {
             animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-0.5rem); }
         }
 
-        .path-section {
-            margin: 200px 0;
-            position: relative;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .checkpoint {
+        /* Modules Section */
+        .modules {
+            padding: 6rem 1.5rem;
+        }
+
+        .modules-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .modules-title {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .modules-subtitle {
+            font-size: 1.25rem;
+            color: var(--muted-foreground);
+        }
+
+        .modules-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        .module-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s;
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(4rem);
         }
 
-        .checkpoint.visible {
+        .module-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .checkpoint-content {
+        .module-card:hover {
+            border-color: rgba(205, 255, 62, 0.5);
+            box-shadow: var(--glow);
+        }
+
+        .module-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .module-icon-wrapper {
+            flex-shrink: 0;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 0.75rem;
+            background: rgba(205, 255, 62, 0.1);
             display: flex;
             align-items: center;
-            gap: 60px;
-            margin-bottom: 120px;
+            justify-content: center;
+            transition: background 0.3s;
         }
 
-        .checkpoint-content.reverse {
-            flex-direction: row-reverse;
-        }
-
-        .module-display {
-            background: rgba(20, 24, 30, 0.95);
-            border: 1px solid rgba(205, 255, 62, 0.3);
-            border-radius: 16px;
-            padding: 32px;
-            min-width: 300px;
-            box-shadow: 0 0 30px rgba(205, 255, 62, 0.2);
-            transition: all 0.3s;
-        }
-
-        .module-display:hover {
-            box-shadow: 0 0 50px rgba(205, 255, 62, 0.4);
-            transform: scale(1.05);
+        .module-card:hover .module-icon-wrapper {
+            background: rgba(205, 255, 62, 0.2);
         }
 
         .module-icon {
-            width: 64px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(205, 255, 62, 0.1);
-            border-radius: 12px;
-            margin-bottom: 20px;
+            width: 2rem;
+            height: 2rem;
+            color: var(--primary);
         }
 
-        .module-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .module-description {
-            color: rgba(205, 255, 62, 0.7);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .checkpoint-message {
+        .module-body {
             flex: 1;
         }
 
-        .message-title {
-            font-size: 32px;
+        .module-tagline {
+            font-size: 0.875rem;
             font-weight: 600;
-            margin-bottom: 16px;
-            color: #CDFF3E;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
         }
 
-        .message-text {
-            font-size: 18px;
-            line-height: 1.8;
-            color: rgba(205, 255, 62, 0.8);
+        .module-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .module-description {
+            color: var(--muted-foreground);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .module-insight {
+            font-size: 0.875rem;
             font-style: italic;
+            color: rgba(205, 255, 62, 0.7);
+            border-left: 2px solid rgba(205, 255, 62, 0.3);
+            padding-left: 1rem;
         }
 
-        .connection-line {
-            position: absolute;
-            left: 50%;
-            width: 2px;
-            background: linear-gradient(to bottom, rgba(205, 255, 62, 0.3), rgba(205, 255, 62, 0.1));
-            transform: translateX(-50%);
-            z-index: -1;
-        }
-
-        .pulse-dot {
-            width: 16px;
-            height: 16px;
-            background: #CDFF3E;
-            border-radius: 50%;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(205, 255, 62, 0.7);
-            }
-            50% {
-                box-shadow: 0 0 0 20px rgba(205, 255, 62, 0);
-            }
-        }
-
-        .footer-section {
-            min-height: 50vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        /* Closing Section */
+        .closing {
+            position: relative;
+            padding: 8rem 1.5rem;
             text-align: center;
         }
 
-        .footer-title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 24px;
+        .closing::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, hsl(75 100% 60% / 0.05), transparent);
+            pointer-events: none;
         }
 
-        .footer-text {
-            font-size: 20px;
-            color: rgba(205, 255, 62, 0.7);
-            max-width: 600px;
+        .closing-content {
+            position: relative;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .closing-title {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .closing-text {
+            font-size: 1.25rem;
+            color: var(--muted-foreground);
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .module-content {
+                flex-direction: column;
+            }
+
+            .module-icon-wrapper {
+                width: 3rem;
+                height: 3rem;
+            }
+
+            .module-icon {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -208,98 +347,63 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // Icons
-        const ChevronDown = () => (
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-        );
-
-        const Network = ({ size = 40 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="16" y="16" width="6" height="6" rx="1"></rect>
-                <rect x="2" y="16" width="6" height="6" rx="1"></rect>
-                <rect x="9" y="2" width="6" height="6" rx="1"></rect>
-                <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path>
-                <path d="M12 12V8"></path>
-            </svg>
-        );
-
-        const Database = ({ size = 40 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-            </svg>
-        );
-
-        const Users = ({ size = 40 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-        );
-
-        const AlertTriangle = ({ size = 40 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
-                <line x1="12" y1="9" x2="12" y2="13"></line>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
-        );
-
-        const Shield = ({ size = 40 }) => (
-            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-        );
-
-        const checkpoints = [
+        const modules = [
             {
-                id: 'network',
-                icon: Network,
-                title: 'Network Module',
-                description: 'The foundation of connection, where paths converge and possibilities emerge.',
-                message: 'Balance',
-                poem: '"In the dance of distributed trust, every node finds its rhythm, every connection its purpose."'
+                id: "network",
+                icon: "network",
+                title: "Network Module",
+                tagline: "The Foundation",
+                description: "Distributed trust architecture where every node contributes to collective resilience and efficiency.",
+                insight: "In decentralized systems, strength emerges from connection—not hierarchy."
             },
             {
-                id: 'vault',
-                icon: Database,
-                title: 'Vault Module',
-                description: 'A sanctuary of value, where resources rest and potential awaits.',
-                message: 'Security',
-                poem: '"Like roots deep in earth, vaults anchor the system, holding what matters most while nurturing growth."'
+                id: "vault",
+                icon: "database",
+                title: "Vault Module",
+                tagline: "The Sanctuary",
+                description: "Secure value storage with cryptographic guarantees, enabling composable financial primitives.",
+                insight: "True security lies not in walls, but in mathematical certainty."
             },
             {
-                id: 'operator',
-                icon: Users,
-                title: 'Operator Module',
-                description: 'The stewards of action, bridging intention with execution.',
-                message: 'Collaboration',
-                poem: '"Through shared responsibility, individual strength becomes collective power, isolation transforms into symphony."'
+                id: "operator",
+                icon: "users",
+                title: "Operator Module",
+                tagline: "The Stewards",
+                description: "Delegated execution layer bridging user intent with protocol-level actions through trusted operators.",
+                insight: "Delegation amplifies capability when trust is systematically verifiable."
             },
             {
-                id: 'slasher',
-                icon: AlertTriangle,
-                title: 'Slasher Module',
-                description: 'The guardian of integrity, maintaining balance through accountability.',
-                message: 'Integrity',
-                poem: '"In the space between trust and verification, accountability ensures that balance persists through time."'
+                id: "slasher",
+                icon: "alert-triangle",
+                title: "Slasher Module",
+                tagline: "The Guardian",
+                description: "Economic security mechanism enforcing protocol rules through stake-based accountability.",
+                insight: "Integrity persists when incentives align with honest behavior."
             },
             {
-                id: 'resolver',
-                icon: Shield,
-                title: 'Resolver Module',
-                description: 'The harmonizer of conflicts, weaving resolution from discord.',
-                message: 'Evolution',
-                poem: '"From every challenge resolved, the system learns, adapts, evolves—becoming more than it was."'
+                id: "resolver",
+                icon: "shield",
+                title: "Resolver Module",
+                tagline: "The Harmonizer",
+                description: "Dispute resolution framework transforming conflicts into consensus through transparent arbitration.",
+                insight: "Evolution emerges from challenges resolved, not avoided."
             }
         ];
 
-        function Checkpoint({ checkpoint, index }) {
+        function Icon({ name, className = "" }) {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, []);
+
+            return React.createElement('i', {
+                'data-lucide': name,
+                className: className
+            });
+        }
+
+        function ModuleCard({ module, index }) {
             const [isVisible, setIsVisible] = useState(false);
             const ref = useRef(null);
 
@@ -324,22 +428,30 @@
                 };
             }, []);
 
-            const Icon = checkpoint.icon;
-            const isReverse = index % 2 === 1;
+            useEffect(() => {
+                if (isVisible && window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [isVisible]);
 
             return (
-                <div ref={ref} className={`checkpoint ${isVisible ? 'visible' : ''}`}>
-                    <div className={`checkpoint-content ${isReverse ? 'reverse' : ''}`}>
-                        <div className="module-display">
-                            <div className="module-icon">
-                                <Icon size={64} />
-                            </div>
-                            <div className="module-title">{checkpoint.title}</div>
-                            <div className="module-description">{checkpoint.description}</div>
+                <div
+                    ref={ref}
+                    className={`module-card ${isVisible ? 'visible' : ''}`}
+                    style={{ 
+                        transitionDuration: '1s',
+                        transitionDelay: `${index * 100}ms` 
+                    }}
+                >
+                    <div className="module-content">
+                        <div className="module-icon-wrapper">
+                            <Icon name={module.icon} className="module-icon" />
                         </div>
-                        <div className="checkpoint-message">
-                            <div className="message-title">{checkpoint.message}</div>
-                            <div className="message-text">{checkpoint.poem}</div>
+                        <div className="module-body">
+                            <div className="module-tagline">{module.tagline}</div>
+                            <h3 className="module-title">{module.title}</h3>
+                            <p className="module-description">{module.description}</p>
+                            <p className="module-insight">{module.insight}</p>
                         </div>
                     </div>
                 </div>
@@ -347,35 +459,83 @@
         }
 
         function App() {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, []);
+
             return (
                 <div>
+                    {/* Header */}
+                    <header className={scrolled ? 'scrolled' : ''}>
+                        <div className="container">
+                            <svg className="logo" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="400" fill="#CDFF3E"/>
+                                <path d="M77 76H233V123H155V144H217V191H155V212H233V259H77V76Z" fill="black"/>
+                            </svg>
+                        </div>
+                    </header>
+
                     {/* Hero Section */}
-                    <section className="hero-section">
-                        <h1 className="hero-title">The Path of Symbiosis</h1>
-                        <p className="hero-subtitle">
-                            A journey through balance, collaboration, and evolution—where every module tells a story of growth.
-                        </p>
-                        <div className="scroll-indicator">
-                            <ChevronDown />
+                    <section className="hero">
+                        <div className="hero-content">
+                            <div className="hero-badge">Modular Infrastructure</div>
+                            <h1 className="hero-title">The Path of Symbiosis</h1>
+                            <p className="hero-subtitle">
+                                Where distributed systems evolve through balance, collaboration, and shared accountability.
+                            </p>
+                            <div className="hero-cta">
+                                <span>Explore the modules</span>
+                                <Icon name="chevron-down" className="bounce-icon" />
+                            </div>
                         </div>
                     </section>
 
-                    {/* Journey Path */}
-                    <div className="journey-container">
-                        <div className="path-section">
-                            {checkpoints.map((checkpoint, index) => (
-                                <Checkpoint key={checkpoint.id} checkpoint={checkpoint} index={index} />
-                            ))}
-                        </div>
-                    </div>
+                    {/* Modules Section */}
+                    <section className="modules">
+                        <div className="container">
+                            <div className="modules-header">
+                                <h2 className="modules-title">Core Modules</h2>
+                                <p className="modules-subtitle">Five pillars of a resilient, adaptive system</p>
+                            </div>
 
-                    {/* Footer Section */}
-                    <section className="footer-section">
-                        <h2 className="footer-title">The Journey Continues</h2>
-                        <p className="footer-text">
-                            In symbiosis, there is no end—only transformation. Each module, each connection, each moment of balance contributes to an ever-evolving whole.
-                        </p>
+                            <div className="modules-grid">
+                                {modules.map((module, index) => (
+                                    <ModuleCard key={module.id} module={module} index={index} />
+                                ))}
+                            </div>
+                        </div>
                     </section>
+
+                    {/* Closing Section */}
+                    <section className="closing">
+                        <div className="closing-content">
+                            <h2 className="closing-title">Continuous Evolution</h2>
+                            <p className="closing-text">
+                                In symbiotic systems, there is no final state—only perpetual transformation. 
+                                Each module strengthens the whole, each interaction creates new possibilities, 
+                                and each challenge overcome expands the system's capacity for resilience.
+                            </p>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer>
+                        <div className="container">
+                            <p>Built on principles of decentralization, transparency, and composability.</p>
+                        </div>
+                    </footer>
                 </div>
             );
         }
