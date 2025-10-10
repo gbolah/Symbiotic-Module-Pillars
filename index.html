@@ -1,699 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Symbiosis - Modular Infrastructure</title>
-    <meta name="description" content="Explore the path of symbiosis through distributed systems, modular architecture, and collaborative evolution">
-    <meta name="author" content="Symbiosis Team">
-    <meta property="og:title" content="Symbiosis - Modular Infrastructure">
-    <meta property="og:description" content="Where distributed systems evolve through balance, collaboration, and shared accountability">
-    
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#00ff88" />
+  <title>The Path of Symbiosis</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0a0a0a;
-            color: #FFFFFF;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            min-height: 100vh;
-        }
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  <style>
+    :root {
+      --neon-green: #00ff88;
+      --black: #0a0a0a;
+      --gray: #121212;
+      --text-light: #e6ffe6;
+    }
 
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        @keyframes bounce-subtle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, #0d0d0d, #000);
+      color: var(--text-light);
+      overflow-x: hidden;
+    }
 
-        @keyframes celebrate {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
+    header {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+    }
 
-        @keyframes accordion-down {
-            from {
-                height: 0;
-                opacity: 0;
-            }
-            to {
-                height: auto;
-                opacity: 1;
-            }
-        }
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      color: var(--neon-green);
+      text-shadow: 0 0 20px var(--neon-green);
+      letter-spacing: 2px;
+    }
 
-        .animate-pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
+    header p {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #aaa;
+    }
 
-        .animate-bounce-subtle {
-            animation: bounce-subtle 2s ease-in-out infinite;
-        }
+    .path-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      margin-top: 3rem;
+      gap: 5rem;
+      padding-bottom: 6rem;
+    }
 
-        .animate-celebrate {
-            animation: celebrate 0.6s ease-in-out;
-        }
+    .node {
+      position: relative;
+      width: 200px;
+      text-align: center;
+      animation: fadeUp 1s ease forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
 
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
+    .node.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.8s ease;
+    }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+    .node-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      background: var(--gray);
+      border: 2px solid var(--neon-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+      transition: 0.3s;
+    }
 
-        .hero-grid {
-            position: absolute;
-            inset: 0;
-            opacity: 0.3;
-            background-image: 
-                linear-gradient(rgba(205, 255, 62, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(205, 255, 62, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-        }
+    .node-icon:hover {
+      box-shadow: 0 0 35px var(--neon-green);
+      transform: scale(1.1);
+    }
 
-        .hero-glow {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(205, 255, 62, 0.1) 0%, transparent 50%, rgba(205, 255, 62, 0.05) 100%);
-        }
+    .node h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon-green);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
 
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
-            max-width: 80rem;
-            margin: 0 auto;
-        }
+    .node p {
+      font-size: 0.95rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(205, 255, 62, 0.3);
-            border-radius: 50px;
-            background: rgba(205, 255, 62, 0.05);
-        }
+    .connector {
+      position: absolute;
+      width: 4px;
+      height: 80px;
+      background: linear-gradient(var(--neon-green), transparent);
+      top: -90px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.4;
+    }
 
-        .hero-badge span {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #CDFF3E;
-        }
+    .glow {
+      position: absolute;
+      width: 120%;
+      height: 120%;
+      top: -10%;
+      left: -10%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,136,0.3), transparent 70%);
+      filter: blur(20px);
+      z-index: -1;
+    }
 
-        .hero-title {
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.03em;
-        }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #888;
+      border-top: 1px solid #111;
+      font-size: 0.9rem;
+    }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #FFFFFF 0%, #CDFF3E 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .hero-description {
-            font-size: clamp(1.25rem, 2vw, 2rem);
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 48rem;
-            margin: 0 auto 3rem;
-            line-height: 1.6;
-        }
-
-        /* Modules Section */
-        .modules-section {
-            padding: 5rem 1rem;
-            position: relative;
-        }
-
-        .modules-bg {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent, rgba(205, 255, 62, 0.05), transparent);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .section-number {
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            color: #CDFF3E;
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-size: clamp(3rem, 6vw, 6rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .section-subtitle {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 42rem;
-            margin: 0 auto;
-        }
-
-        .modules-grid {
-            max-width: 90rem;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1rem;
-            position: relative;
-            z-index: 10;
-            margin-bottom: 2rem;
-        }
-
-        .module-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(205, 255, 62, 0.3);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .module-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(205, 255, 62, 0) 0%, rgba(205, 255, 62, 0.05) 50%, rgba(205, 255, 62, 0) 100%);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .module-card:hover::before {
-            opacity: 1;
-        }
-
-        .module-card:hover {
-            border-color: rgba(205, 255, 62, 0.5);
-            transform: scale(1.05);
-            box-shadow: 0 20px 60px rgba(205, 255, 62, 0.3);
-        }
-
-        .module-card.selected {
-            border-color: #CDFF3E;
-            transform: scale(1.05);
-            box-shadow: 0 30px 80px rgba(205, 255, 62, 0.3);
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .module-icon-wrapper {
-            padding: 0.75rem;
-            border-radius: 1rem;
-            background: rgba(205, 255, 62, 0.1);
-            transition: all 0.5s;
-        }
-
-        .module-card.selected .module-icon-wrapper {
-            background: rgba(205, 255, 62, 0.2);
-        }
-
-        .module-icon {
-            width: 2rem;
-            height: 2rem;
-            color: #CDFF3E;
-        }
-
-        .module-tagline {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #CDFF3E;
-        }
-
-        .module-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            transition: color 0.3s;
-            position: relative;
-            z-index: 10;
-        }
-
-        .module-card:hover .module-title {
-            color: #CDFF3E;
-        }
-
-        .module-description {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .module-insight {
-            padding-left: 1rem;
-            border-left: 2px solid rgba(205, 255, 62, 0.3);
-            font-size: 0.875rem;
-            font-style: italic;
-            color: rgba(205, 255, 62, 0.7);
-            position: relative;
-            z-index: 10;
-        }
-
-        .module-details {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(205, 255, 62, 0.2);
-            position: relative;
-            z-index: 10;
-        }
-
-        .module-details h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #CDFF3E;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .module-details ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .module-details li {
-            display: flex;
-            align-items: start;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        .module-details li::before {
-            content: '';
-            width: 0.375rem;
-            height: 0.375rem;
-            border-radius: 50%;
-            background: #CDFF3E;
-            margin-top: 0.5rem;
-            flex-shrink: 0;
-        }
-
-        .chevron {
-            position: absolute;
-            bottom: 1rem;
-            right: 1rem;
-            width: 1.25rem;
-            height: 1.25rem;
-            color: rgba(205, 255, 62, 0.5);
-            transition: transform 0.3s;
-            z-index: 10;
-        }
-
-        .module-card.selected .chevron {
-            transform: rotate(180deg);
-        }
-
-        .encouragement {
-            text-align: center;
-            padding: 2rem 1rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .encouragement p {
-            color: #CDFF3E;
-            font-size: 1.125rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .encouragement svg {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-
-        /* Closing Section */
-        .closing-section {
-            padding: 8rem 1rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .closing-bg {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at center, rgba(205, 255, 62, 0.1) 0%, transparent 60%);
-        }
-
-        .closing-content {
-            max-width: 64rem;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-
-        .closing-title {
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 800;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-
-        .closing-description {
-            font-size: clamp(1.25rem, 2vw, 2rem);
-            color: rgba(255, 255, 255, 0.75);
-            line-height: 1.8;
-        }
-
-        /* Footer */
-        footer {
-            padding: 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(205, 255, 62, 0.2);
-        }
-
-        footer p {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.875rem;
-        }
-
-        @media (max-width: 768px) {
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    @media (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      .node { width: 90%; }
+    }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
+  <header>
+    <h1>The Path of Symbiosis</h1>
+    <p>Follow the connection. Witness evolution through balance, modularity, and growth.</p>
+  </header>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+  <main class="path-container">
+    <div class="node" style="animation-delay: 0s;">
+      <div class="connector"></div>
+      <div class="node-icon"><i data-lucide="circle"></i><span class="glow"></span></div>
+      <h3>Awakening</h3>
+      <p>It begins with awareness — understanding the need for connection beyond isolation.</p>
+    </div>
 
-        const modules = [
-            {
-                id: "network",
-                icon: "network",
-                title: "Network Module",
-                tagline: "The Foundation",
-                description: "Distributed trust architecture where every node contributes to collective resilience and efficiency.",
-                insight: "In decentralized systems, strength emerges from connection, not hierarchy.",
-                details: [
-                    "Every node participates in consensus and validation",
-                    "Horizontal scaling through peer to peer architecture",
-                    "Byzantine fault tolerance ensures system integrity",
-                    "Dynamic topology adapts to network conditions"
-                ]
-            },
-            {
-                id: "vault",
-                icon: "database",
-                title: "Vault Module",
-                tagline: "The Sanctuary",
-                description: "Secure value storage with cryptographic guarantees, enabling composable financial primitives.",
-                insight: "True security lies not in walls, but in mathematical certainty.",
-                details: [
-                    "Multi signature cryptographic security",
-                    "Composable primitive design for flexibility",
-                    "Zero knowledge proofs for privacy preservation",
-                    "Time locked vaults for strategic execution"
-                ]
-            },
-            {
-                id: "operator",
-                icon: "users",
-                title: "Operator Module",
-                tagline: "The Stewards",
-                description: "Delegated execution layer bridging user intent with protocol level actions through trusted operators.",
-                insight: "Delegation amplifies capability when trust is systematically verifiable.",
-                details: [
-                    "Transparent delegation mechanisms",
-                    "Automated execution of complex strategies",
-                    "Performance based reputation systems",
-                    "Slashing conditions for accountability"
-                ]
-            },
-            {
-                id: "slasher",
-                icon: "alert-triangle",
-                title: "Slasher Module",
-                tagline: "The Guardian",
-                description: "Economic security mechanism enforcing protocol rules through stake based accountability.",
-                insight: "Integrity persists when incentives align with honest behavior.",
-                details: [
-                    "Economic penalties for protocol violations",
-                    "Graduated punishment based on severity",
-                    "Dispute windows for fair resolution",
-                    "Reward distribution to whistleblowers"
-                ]
-            },
-            {
-                id: "resolver",
-                icon: "shield",
-                title: "Resolver Module",
-                tagline: "The Harmonizer",
-                description: "Dispute resolution framework transforming conflicts into consensus through transparent arbitration.",
-                insight: "Evolution emerges from challenges resolved, not avoided.",
-                details: [
-                    "Multi party arbitration with cryptoeconomic security",
-                    "Evidence submission and verification protocols",
-                    "Time bounded resolution processes",
-                    "Appeal mechanisms for complex cases"
-                ]
-            }
-        ];
+    <div class="node" style="animation-delay: 0.2s;">
+      <div class="connector"></div>
+      <div class="node-icon"><i data-lucide="link"></i><span class="glow"></span></div>
+      <h3>Connection</h3>
+      <p>Modules find each other. Vaults link. Energy flows through the ecosystem.</p>
+    </div>
 
-        function Icon({ name }) {
-            useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
-            }, []);
+    <div class="node" style="animation-delay: 0.4s;">
+      <div class="connector"></div>
+      <div class="node-icon"><i data-lucide="activity"></i><span class="glow"></span></div>
+      <h3>Resonance</h3>
+      <p>Balance forms. The system begins to hum with shared purpose and aligned strength.</p>
+    </div>
 
-            return React.createElement('i', {
-                'data-lucide': name,
-                className: 'module-icon'
-            });
-        }
+    <div class="node" style="animation-delay: 0.6s;">
+      <div class="connector"></div>
+      <div class="node-icon"><i data-lucide="infinity"></i><span class="glow"></span></div>
+      <h3>Evolution</h3>
+      <p>Each part evolves — self-improving, adapting, building a greater whole.</p>
+    </div>
 
-        function ModuleCard({ module, isSelected, isCelebrating, onClick }) {
-            useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
-            }, [isSelected]);
+    <div class="node" style="animation-delay: 0.8s;">
+      <div class="connector"></div>
+      <div class="node-icon"><i data-lucide="sparkles"></i><span class="glow"></span></div>
+      <h3>Symbiosis</h3>
+      <p>Harmony achieved. The collective thrives as one — ever-growing, ever-learning.</p>
+    </div>
+  </main>
 
-            const cardClass = `module-card ${isSelected ? 'selected' : ''} ${isCelebrating ? 'animate-celebrate' : ''}`;
+  <footer>
+    <p>Crafted by the Symbiotic Collective ⚡ Neon Green Spirit</p>
+  </footer>
 
-            return (
-                <div className={cardClass} onClick={onClick}>
-                    <div className="module-header">
-                        <div className={`module-icon-wrapper ${isSelected ? 'animate-pulse-glow' : ''}`}>
-                            <Icon name={module.icon} />
-                        </div>
-                        <div className="module-tagline">{module.tagline}</div>
-                    </div>
+  <script>
+    lucide.createIcons();
 
-                    <h3 className="module-title">{module.title}</h3>
-                    <p className="module-description">{module.description}</p>
-                    <div className="module-insight">
-                        <p>{module.insight}</p>
-                    </div>
+    const nodes = document.querySelectorAll('.node');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.2 });
 
-                    {isSelected && (
-                        <div className="module-details animate-fade-in">
-                            <h4>
-                                <i data-lucide="sparkles" style={{ width: '1rem', height: '1rem' }}></i>
-                                Key Features
-                            </h4>
-                            <ul>
-                                {module.details.map((detail, idx) => (
-                                    <li key={idx} style={{ animationDelay: `${idx * 100}ms` }}>
-                                        {detail}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-                    <i data-lucide="chevron-down" className="chevron"></i>
-                </div>
-            );
-        }
-
-        function App() {
-            const [selectedModule, setSelectedModule] = useState(null);
-            const [celebrateId, setCelebrateId] = useState(null);
-
-            useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
-            }, [selectedModule]);
-
-            const handleModuleClick = (id) => {
-                if (selectedModule === id) {
-                    setSelectedModule(null);
-                } else {
-                    setSelectedModule(id);
-                    setCelebrateId(id);
-                    setTimeout(() => setCelebrateId(null), 600);
-                }
-            };
-
-            return (
-                <div>
-                    {/* Hero Section */}
-                    <section className="hero">
-                        <div className="hero-grid"></div>
-                        <div className="hero-glow"></div>
-                        <div className="hero-content">
-                            <div className="hero-badge animate-pulse-glow">
-                                <i data-lucide="sparkles" style={{ width: '1rem', height: '1rem', color: '#CDFF3E' }}></i>
-                                <span>Modular Infrastructure</span>
-                            </div>
-
-                            <h1 className="hero-title">
-                                <span className="gradient-text">The Path of Symbiosis</span>
-                            </h1>
-
-                            <p className="hero-description">
-                                Where distributed systems evolve through balance, collaboration, and shared accountability.
-                            </p>
-
-                            <div className="animate-bounce-subtle">
-                                <i data-lucide="chevron-down" style={{ width: '2rem', height: '2rem', color: '#CDFF3E', margin: '0 auto' }}></i>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Modules Section */}
-                    <section className="modules-section">
-                        <div className="modules-bg"></div>
-                        
-                        <div className="section-header">
-                            <div className="section-number">01 CORE</div>
-                            <h2 className="section-title">Five Pillars</h2>
-                            <p className="section-subtitle">
-                                A resilient, adaptive system built on fundamental principles
-                            </p>
-                        </div>
-
-                        <div className="modules-grid">
-                            {modules.map((module) => (
-                                <ModuleCard
-                                    key={module.id}
-                                    module={module}
-                                    isSelected={selectedModule === module.id}
-                                    isCelebrating={celebrateId === module.id}
-                                    onClick={() => handleModuleClick(module.id)}
-                                />
-                            ))}
-                        </div>
-
-                        {selectedModule && (
-                            <div className="encouragement animate-fade-in">
-                                <p>
-                                    <i data-lucide="sparkles" className="animate-pulse-glow"></i>
-                                    Keep exploring! Click another pillar to learn more!
-                                    <i data-lucide="sparkles" className="animate-pulse-glow"></i>
-                                </p>
-                            </div>
-                        )}
-                    </section>
-
-                    {/* Closing Section */}
-                    <section className="closing-section">
-                        <div className="closing-bg"></div>
-                        <div className="closing-content">
-                            <h2 className="closing-title">
-                                <span className="gradient-text">Continuous Evolution</span>
-                            </h2>
-                            <p className="closing-description">
-                                In symbiotic systems, there is no final state, only perpetual transformation. 
-                                Each module strengthens the whole, each interaction creates new possibilities, 
-                                and each challenge overcome expands the system's capacity for resilience.
-                            </p>
-                        </div>
-                    </section>
-
-                    {/* Footer */}
-                    <footer>
-                        <p>Built on principles of decentralization, transparency, and composability.</p>
-                    </footer>
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+    nodes.forEach(node => observer.observe(node));
+  </script>
 </body>
 </html>
