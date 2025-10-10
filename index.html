@@ -5,20 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Symbiosis - Modular Infrastructure</title>
     <meta name="description" content="Explore the path of symbiosis through distributed systems, modular architecture, and collaborative evolution">
-    <meta name="author" content="Symbiosis">
-
-    <meta property="og:title" content="Symbiosis - Modular Infrastructure">
-    <meta property="og:description" content="Explore the path of symbiosis through distributed systems, modular architecture, and collaborative evolution">
-    <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary_large_image">
-
-    <!-- React and Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -28,141 +17,99 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --background: hsl(217, 20%, 5%);
-            --foreground: hsl(75, 100%, 80%);
-            --card: hsl(217, 20%, 8%);
-            --card-foreground: hsl(75, 100%, 80%);
-            --primary: hsl(75, 100%, 60%);
-            --primary-foreground: hsl(217, 20%, 5%);
-            --secondary: hsl(217, 20%, 15%);
-            --muted: hsl(217, 20%, 15%);
-            --muted-foreground: hsl(75, 30%, 50%);
-            --border: hsl(217, 20%, 20%);
-            --ring: hsl(75, 100%, 60%);
-            --glow: 0 0 40px hsl(75 100% 60% / 0.3);
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: var(--background);
-            color: var(--foreground);
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #FFFFFF;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            transition: all 0.3s;
-        }
-
-        header.scrolled {
-            background: rgba(10, 12, 15, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        header .container {
-            padding: 1rem 1.5rem;
-        }
-
-        .logo {
-            height: 3rem;
-            width: 3rem;
-        }
-
         /* Hero Section */
         .hero {
-            position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 6rem 1.5rem;
-            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at top, rgba(205, 255, 62, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom, rgba(205, 255, 62, 0.1) 0%, transparent 50%);
         }
 
-        .hero::before {
-            content: '';
+        .hero-grid {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, hsl(75 100% 60% / 0.05), transparent);
-            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(205, 255, 62, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(205, 255, 62, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
         }
 
         .hero-content {
             position: relative;
-            max-width: 64rem;
-            margin: 0 auto;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
         }
 
         .hero-badge {
             display: inline-block;
-            font-size: 0.875rem;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid rgba(205, 255, 62, 0.3);
+            border-radius: 50px;
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            animation: fadeIn 0.6s ease-out;
+            color: #CDFF3E;
+            margin-bottom: 2rem;
+            background: rgba(205, 255, 62, 0.05);
+            animation: fadeIn 0.8s ease-out;
         }
 
         .hero-title {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            background: linear-gradient(to bottom right, var(--foreground), rgba(205, 255, 62, 0.6));
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 800;
+            line-height: 0.95;
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        .title-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #CDFF3E 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 1.5rem;
-            animation: fadeIn 0.6s ease-out 0.2s both;
         }
 
-        .hero-subtitle {
-            font-size: clamp(1.125rem, 3vw, 1.5rem);
-            color: var(--muted-foreground);
-            max-width: 42rem;
-            margin: 0 auto 2rem;
-            line-height: 1.8;
-            animation: fadeIn 0.6s ease-out 0.4s both;
+        .hero-description {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            animation: fadeIn 0.8s ease-out 0.4s both;
         }
 
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            color: rgba(205, 255, 62, 0.7);
-            animation: fadeIn 0.6s ease-out 0.6s both;
-        }
-
-        .bounce-icon {
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
             animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-0.5rem); }
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 10px); }
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -171,42 +118,71 @@
         }
 
         /* Modules Section */
-        .modules {
-            padding: 6rem 1.5rem;
+        .modules-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(to bottom, transparent, rgba(205, 255, 62, 0.02), transparent);
         }
 
-        .modules-header {
+        .section-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
-        .modules-title {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
-            font-weight: 700;
+        .section-number {
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: #CDFF3E;
             margin-bottom: 1rem;
         }
 
-        .modules-subtitle {
-            font-size: 1.25rem;
-            color: var(--muted-foreground);
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
         }
 
-        .modules-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            max-width: 80rem;
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 600px;
             margin: 0 auto;
         }
 
+        .modules-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
         .module-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 2rem;
-            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(205, 255, 62, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
             opacity: 0;
-            transform: translateY(4rem);
+            transform: translateY(50px);
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                        rgba(205, 255, 62, 0.08), 
+                        transparent 40%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .module-card:hover::before {
+            opacity: 1;
         }
 
         .module-card.visible {
@@ -215,128 +191,102 @@
         }
 
         .module-card:hover {
-            border-color: rgba(205, 255, 62, 0.5);
-            box-shadow: var(--glow);
+            border-color: rgba(205, 255, 62, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(205, 255, 62, 0.15);
         }
 
-        .module-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-        }
-
-        .module-icon-wrapper {
-            flex-shrink: 0;
-            width: 4rem;
-            height: 4rem;
-            border-radius: 0.75rem;
-            background: rgba(205, 255, 62, 0.1);
+        .module-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
-        }
-
-        .module-card:hover .module-icon-wrapper {
-            background: rgba(205, 255, 62, 0.2);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
         }
 
         .module-icon {
-            width: 2rem;
-            height: 2rem;
-            color: var(--primary);
-        }
-
-        .module-body {
-            flex: 1;
+            width: 3rem;
+            height: 3rem;
+            color: #CDFF3E;
+            position: relative;
         }
 
         .module-tagline {
             font-size: 0.875rem;
             font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 0.25rem;
+            color: #CDFF3E;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .module-title {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            color: #FFFFFF;
+            position: relative;
         }
 
         .module-description {
-            color: var(--muted-foreground);
+            font-size: 1rem;
             line-height: 1.7;
-            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+            position: relative;
         }
 
         .module-insight {
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             font-style: italic;
             color: rgba(205, 255, 62, 0.7);
+            padding-left: 1.5rem;
             border-left: 2px solid rgba(205, 255, 62, 0.3);
-            padding-left: 1rem;
+            position: relative;
         }
 
         /* Closing Section */
-        .closing {
-            position: relative;
-            padding: 8rem 1.5rem;
+        .closing-section {
+            padding: 10rem 2rem;
             text-align: center;
-        }
-
-        .closing::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, hsl(75 100% 60% / 0.05), transparent);
-            pointer-events: none;
-        }
-
-        .closing-content {
             position: relative;
-            max-width: 48rem;
-            margin: 0 auto;
+            background: radial-gradient(ellipse at center, rgba(205, 255, 62, 0.1) 0%, transparent 60%);
         }
 
         .closing-title {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
         }
 
-        .closing-text {
-            font-size: 1.25rem;
-            color: var(--muted-foreground);
+        .closing-description {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 800px;
+            margin: 0 auto;
             line-height: 1.8;
         }
 
         /* Footer */
         footer {
-            border-top: 1px solid var(--border);
-            padding: 3rem 1.5rem;
+            padding: 3rem 2rem;
             text-align: center;
+            border-top: 1px solid rgba(205, 255, 62, 0.1);
         }
 
         footer p {
+            color: rgba(255, 255, 255, 0.4);
             font-size: 0.875rem;
-            color: var(--muted-foreground);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .module-content {
-                flex-direction: column;
+            .modules-grid {
+                grid-template-columns: 1fr;
             }
 
-            .module-icon-wrapper {
-                width: 3rem;
-                height: 3rem;
-            }
-
-            .module-icon {
-                width: 1.5rem;
-                height: 1.5rem;
+            .module-card {
+                padding: 2rem;
             }
         }
     </style>
@@ -390,7 +340,7 @@
             }
         ];
 
-        function Icon({ name, className = "" }) {
+        function Icon({ name }) {
             useEffect(() => {
                 if (window.lucide) {
                     window.lucide.createIcons();
@@ -398,8 +348,7 @@
             }, []);
 
             return React.createElement('i', {
-                'data-lucide': name,
-                className: className
+                'data-lucide': name
             });
         }
 
@@ -434,41 +383,39 @@
                 }
             }, [isVisible]);
 
+            const handleMouseMove = (e) => {
+                const card = e.currentTarget;
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            };
+
             return (
                 <div
                     ref={ref}
                     className={`module-card ${isVisible ? 'visible' : ''}`}
+                    onMouseMove={handleMouseMove}
                     style={{ 
                         transitionDuration: '1s',
                         transitionDelay: `${index * 100}ms` 
                     }}
                 >
-                    <div className="module-content">
-                        <div className="module-icon-wrapper">
-                            <Icon name={module.icon} className="module-icon" />
+                    <div className="module-header">
+                        <div className="module-icon">
+                            <Icon name={module.icon} />
                         </div>
-                        <div className="module-body">
-                            <div className="module-tagline">{module.tagline}</div>
-                            <h3 className="module-title">{module.title}</h3>
-                            <p className="module-description">{module.description}</p>
-                            <p className="module-insight">{module.insight}</p>
-                        </div>
+                        <div className="module-tagline">{module.tagline}</div>
                     </div>
+                    <h3 className="module-title">{module.title}</h3>
+                    <p className="module-description">{module.description}</p>
+                    <p className="module-insight">{module.insight}</p>
                 </div>
             );
         }
 
         function App() {
-            const [scrolled, setScrolled] = useState(false);
-
-            useEffect(() => {
-                const handleScroll = () => {
-                    setScrolled(window.scrollY > 50);
-                };
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
-
             useEffect(() => {
                 if (window.lucide) {
                     window.lucide.createIcons();
@@ -477,64 +424,55 @@
 
             return (
                 <div>
-                    {/* Header */}
-                    <header className={scrolled ? 'scrolled' : ''}>
-                        <div className="container">
-                            <svg className="logo" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="400" height="400" fill="#CDFF3E"/>
-                                <path d="M77 76H233V123H155V144H217V191H155V212H233V259H77V76Z" fill="black"/>
-                            </svg>
-                        </div>
-                    </header>
-
                     {/* Hero Section */}
                     <section className="hero">
+                        <div className="hero-grid"></div>
                         <div className="hero-content">
                             <div className="hero-badge">Modular Infrastructure</div>
-                            <h1 className="hero-title">The Path of Symbiosis</h1>
-                            <p className="hero-subtitle">
+                            <h1 className="hero-title">
+                                <span className="title-gradient">The Path of Symbiosis</span>
+                            </h1>
+                            <p className="hero-description">
                                 Where distributed systems evolve through balance, collaboration, and shared accountability.
                             </p>
-                            <div className="hero-cta">
-                                <span>Explore the modules</span>
-                                <Icon name="chevron-down" className="bounce-icon" />
-                            </div>
+                        </div>
+                        <div className="scroll-indicator">
+                            <Icon name="chevron-down" />
                         </div>
                     </section>
 
                     {/* Modules Section */}
-                    <section className="modules">
-                        <div className="container">
-                            <div className="modules-header">
-                                <h2 className="modules-title">Core Modules</h2>
-                                <p className="modules-subtitle">Five pillars of a resilient, adaptive system</p>
-                            </div>
+                    <section className="modules-section">
+                        <div className="section-header">
+                            <div className="section-number">01 — CORE</div>
+                            <h2 className="section-title">Five Pillars</h2>
+                            <p className="section-subtitle">
+                                A resilient, adaptive system built on fundamental principles
+                            </p>
+                        </div>
 
-                            <div className="modules-grid">
-                                {modules.map((module, index) => (
-                                    <ModuleCard key={module.id} module={module} index={index} />
-                                ))}
-                            </div>
+                        <div className="modules-grid">
+                            {modules.map((module, index) => (
+                                <ModuleCard key={module.id} module={module} index={index} />
+                            ))}
                         </div>
                     </section>
 
                     {/* Closing Section */}
-                    <section className="closing">
-                        <div className="closing-content">
-                            <h2 className="closing-title">Continuous Evolution</h2>
-                            <p className="closing-text">
-                                In symbiotic systems, there is no final state—only perpetual transformation. 
-                                Each module strengthens the whole, each interaction creates new possibilities, 
-                                and each challenge overcome expands the system's capacity for resilience.
-                            </p>
-                        </div>
+                    <section className="closing-section">
+                        <h2 className="closing-title">
+                            <span className="title-gradient">Continuous Evolution</span>
+                        </h2>
+                        <p className="closing-description">
+                            In symbiotic systems, there is no final state—only perpetual transformation. 
+                            Each module strengthens the whole, each interaction creates new possibilities, 
+                            and each challenge overcome expands the system's capacity for resilience.
+                        </p>
                     </section>
 
                     {/* Footer */}
                     <footer>
-                        <div className="container">
-                            <p>Built on principles of decentralization, transparency, and composability.</p>
-                        </div>
+                        <p>Built on principles of decentralization, transparency, and composability.</p>
                     </footer>
                 </div>
             );
